@@ -1,5 +1,6 @@
 <?php
 
+use Petrik\Rajzfilmek\Kategoria;
 use Petrik\Rajzfilmek\Rajzfilm;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -77,5 +78,15 @@ return function(Slim\App $app) {
 
         $response->getBody()->write($rajzfilm->toJson());
         return $response->withHeader('Content-type', 'application/json')->withStatus(200);
+    });
+
+
+    
+
+    $app->get('/kategoriak', function(Request $request, Response $response){
+        $kategoria = Kategoria::all();
+        $kimenet = $kategoria->toJson();
+        $response->getBody()->write($kimenet);
+        return $response->withHeader('Content-type', 'application/json');
     });
 };

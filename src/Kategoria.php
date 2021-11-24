@@ -3,11 +3,11 @@ namespace Petrik\Rajzfilmek;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rajzfilm extends Model {
-    protected $table = 'rajzfilm';
+class Kategoria extends Model {
+    protected $table = 'kategoria';
     public $timestamps = false;
 
     //Vagy az egyik, vagy a masik
-    protected $fillable = ['cim', 'hossz', 'kiadasi_ev']; //Mit lehet; összetebb szituációkban hasznos
+    protected $fillable = ['kategoria_nev']; //Mit lehet; összetebb szituációkban hasznos
     protected $guarded = ['id']; // Mit nem lehet; egyszerűbb -||-
 }
