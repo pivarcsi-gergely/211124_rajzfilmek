@@ -15,11 +15,10 @@ return function(Slim\App $app) {
     $app->post('/rajzfilmek', function(Request $request, Response $response){
         $input = json_decode($request->getBody(), true);
         // Bemenet validáció. egy másik órán... :(
-        $rajzfilm = new Rajzfilm();
-        $rajzfilm->setAttributes($input);
-        $rajzfilm->uj();
+        $rajzfilm = Rajzfilm::create($input);
+        $rajzfilm->save();
 
-        $kimenet = json_encode($rajzfilm);
+        $kimenet = $rajzfilm->toJson();
         $response->getBody()->write($kimenet);
         return $response
         ->withStatus(201)
@@ -32,14 +31,14 @@ return function(Slim\App $app) {
             $response->getBody()->write($ki);
             return $response->withHeader('Content-type', 'application/json')->withStatus(400);
         }
-        $rajzfilm = Rajzfilm::getById($args['id']);
+        $rajzfilm = Rajzfilm::find($args['id']);
         if ($rajzfilm === null) {
             $ki = json_encode(['error' => 'Nincs ilyen ID-jű rajzfilm']);
             $response->getBody()->write($ki);
             return $response->withHeader('Content-type', 'application/json')->withStatus(404);
         }
 
-        $rajzfilm->torles();
+        $rajzfilm->delete();
         return $response->withHeader('Content-type', 'application/json')->withStatus(204);
     });
 
@@ -49,8 +48,15 @@ return function(Slim\App $app) {
             $response->getBody()->write($ki);
             return $response->withHeader('Content-type', 'application/json')->withStatus(400);
         }
-        $rajzfilm = Rajzfilm::getById($args['id']);
-        $rajzfilm->modositas();
+        $rajzfilm = Rajzfilm::find($args['id']);
+        if ($rajzfilm === null) {
+            $ki = json_encode(['error' => 'Nincs ilyen ID-jű rajzfilm']);
+            $response->getBody()->write($ki);
+            return $response->withHeader('Content-type', 'application/json')->withStatus(404);
+        }
+
+        $rajzfilm
+        $rajzfilm->edit();
         return $response->withHeader('Content-type', 'application/json')->withStatus(204);
     });
 };
